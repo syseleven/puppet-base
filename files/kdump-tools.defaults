@@ -1,0 +1,3 @@
+# Managed by Puppet
+USE_KDUMP=1
+KDUMP_COREDIR="/var/crash"

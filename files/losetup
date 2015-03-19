@@ -1,0 +1,58 @@
+#!/bin/sh
+#
+# losetup Set up a hacked losetup for swift
+#
+# chkconfig: 12345 99 01
+# description: Set up a hacked losetup for swift
+#
+# /etc/rc.d/init.d/losetup
+# (C) 2014 Kristian Koehntopp
+#
+### BEGIN INIT INFO
+# Provides:             losetup
+# Required-Start: $local_fs $syslog 
+# Required-Stop: $local_fs $syslog 
+# Default-Start: 1 2 3 4 5
+# Default-Stop: 0 6
+# Description: Setup storage bricks for swift
+# Short-Description: Setup storage bricks for swift
+### END INIT INFO
+
+RETVAL=0
+
+# See how we were called.
+
+case "$1" in
+  start)
+  for i in 1 2 3 4
+  do
+    losetup /dev/loop$i /home/loopback-disk-$i.donotdelete
+    mount /dev/loop$i /srv/node/loop$i
+  done
+  RETVAL=0
+  ;;
+
+  status)
+    losetup -a
+    RETVAL=0
+    ;;
+
+  stop)
+    for i in 1 2 3 4 
+    do
+      umount /dev/loop$i
+      losetup -d /dev/loop$i
+    done
+    RETVAL=0
+    ;;
+
+  restart|reload|force-reload|condrestart|try-restart)
+    ;;
+
+  *)
+    echo "Usage: losetup {start|stop|status|restart|reload|force-reload|condrestart|try-restart}"
+    RETVAL=2
+esac
+
+exit ${RETVAL}
+

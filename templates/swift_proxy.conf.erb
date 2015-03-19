@@ -1,0 +1,65 @@
+[DEFAULT]
+bind_port = 8080
+
+bind_ip = <%= @ipaddress_eth0_1620 %> 
+# control node
+
+workers = <%= @worker %>  
+# cpu count/2
+user = swift
+log_name = syslog
+log_facility = LOG_LOCAL1
+log_level = INFO
+log_headers = False
+log_address = /dev/log
+
+
+
+[pipeline:main]
+# revisit the pipeline after checking currect docs
+pipeline = healthcheck cache authtoken keystone proxy-server
+
+# for each pipeline component: a section
+[app:proxy-server]
+use = egg:swift#proxy
+set log_name = proxy-server
+set log_facility = LOG_LOCAL1
+set log_level = INFO
+set log_address = /dev/log
+log_handoffs = true
+allow_account_management = true
+account_autocreate = true
+
+[filter:authtoken]
+log_name = swift
+signing_dir = /var/cache/swift
+paste.filter_factory = keystoneclient.middleware.auth_token:filter_factory
+auth_host = <%= @keystone_host %>  
+# keystone server
+auth_port = 35357  
+# keystone api endpoint
+auth_protocol = http  
+# needs to be https later
+auth_uri = http://<%= @keystone_host %>:5000  
+# non-api endpoint
+# if its defined
+admin_tenant_name = services
+admin_user = <%= @swift_keystone_user %>
+admin_password = <%= @swift_keystone_password %>
+delay_auth_decision = 1
+cache = swift.cache
+include_service_catalog = False
+
+[filter:cache]
+use = egg:swift#memcache
+memcache_servers = <%= @keystone_host %>:11211
+
+[filter:healthcheck]
+use = egg:swift#healthcheck
+
+[filter:keystone]
+use = egg:swift#keystoneauth
+operator_roles = admin, SwiftOperator
+is_admin = true
+
+

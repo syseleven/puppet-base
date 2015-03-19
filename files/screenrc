@@ -1,0 +1,17 @@
+# this file is managed by puppet
+
+# set terminal type for screen
+term screen
+
+# disable flow control
+defflow off
+
+# status line, minimum definition
+hardstatus lastline
+defhstatus "\005c | \005H | \005w"
+
+# the screen copyright message is set to off
+startup_message off
+
+# this ties into /root/.bashrc.ssh-agent and will reconnect your ssh-agent inside a detached screen
+setenv SSH_AUTH_SOCK "/tmp/ssh-agent-$USER-screen"

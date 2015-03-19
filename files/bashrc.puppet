@@ -1,0 +1,68 @@
+# this file is managed by puppet
+
+PATH=$PATH:/opt/openstack-scripts:/opt/openstack-scripts/heat
+
+get_stack_name() {
+  if cmd=$(python -c 'import json; print json.load(open("/config/openstack/latest/meta_data.json", "r"))["meta"]["stack_name"]' 2>/dev/null); then
+    echo "$cmd"
+  fi
+}
+
+export STACKNAME=$(get_stack_name)
+
+if [[ $CLOUD_USER ]]; then
+  export environment_dir=/root/.environments
+  if [ -f "${environment_dir}/${CLOUD_USER}/.bashrc" ]; then
+    . "${environment_dir}/${CLOUD_USER}/.bashrc"
+    environment_dir=${environment_dir}
+  fi
+  if [ -f "${environment_dir}_sys11/${CLOUD_USER}/.bashrc" ]; then
+    environment_dir="${environment_dir}_sys11"
+    . "${environment_dir}/${CLOUD_USER}/.bashrc"
+  fi
+fi
+
+alias senv=deploy_sys11_admin_env
+
+# Deploy environment for Syseleven's admins (requires a ssh key with access to sys11-user-environment)
+deploy_sys11_admin_env() {
+  environment_dir=/root/.environments_sys11
+  if [ ! -d "$environment_dir" ]; then
+    git clone --depth 1 --branch master git@gitlab.syseleven.de:openstack/sys11-user-environment.git $environment_dir
+  fi
+  exec bash
+  }
+
+if [[ $GIT_AUTHOR_NAME ]]; then
+  GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
+fi
+
+if [[ $GIT_AUTHOR_EMAIL ]]; then
+  GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
+fi
+
+export GIT_COMMITTER_NAME
+export GIT_COMMITTER_EMAIL
+
+# set default push method, https://youtrack.syseleven.de/issue/os-59
+# only for git-1.9.0
+git_version=($(git --version)); git_version=${git_version[@]: -1}
+if [[ $(printf "${git_version}\n1.9.0\n" | sort -V | head -n 1) = '1.9.0' ]]; then
+  git config --global push.default simple
+fi
+
+alias mr='mr -d /'
+
+# $1 = type; 0 - both, 1 - tab, 2 - title
+# rest = text
+setTerminalText () {
+    # echo works in bash & zsh
+    local mode=$1 ; shift
+    echo -ne "\033]$mode;$@\007"
+}
+stt_both  () { setTerminalText 0 $@; }
+stt_tab   () { setTerminalText 1 $@; }
+stt_title () { setTerminalText 2 $@; }
+
+[[ $STACKNAME ]] && stt_title $STACKNAME
+stt_tab $HOSTNAME
