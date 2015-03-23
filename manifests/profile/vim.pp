@@ -1,6 +1,6 @@
 # Deploys a vim configuration suitable for puppet development.
 class base::profile::vim (
-  $url = 'git@gitlab.syseleven.de:openstack/vim-config.git',
+  $url = 'https://github.com/syseleven/vim-config.git',
   $path = '/opt/vim-config',
   ) {
   vcsrepo { 'vim-config':
