@@ -5,6 +5,7 @@ class base::role::common (
   class { '::base::profile::bashrc': }
   class { '::base::profile::vim': }
   class { '::base::profile::grub': }
+  class { '::base::profile::kernel': }
   class { '::base::profile::kdump': }
   class { '::base::profile::kmod': }
   class { '::base::profile::packages': }
