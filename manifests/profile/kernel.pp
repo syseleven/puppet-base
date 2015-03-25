@@ -1,4 +1,4 @@
-class base::profile::kernel {
+class base::profile::kernel () {
 
 if $::lsbdistid == 'Ubuntu' {
 
@@ -14,7 +14,7 @@ if $::lsbdistid == 'Ubuntu' {
         ensure => latest,
       }
 
-    } else
+    } else {
 
       package { 'linux-virtual':
         ensure => latest,
