@@ -1,4 +1,15 @@
 #!/usr/bin/env python2.7
+"""
+kernel-cleanup.py
+
+Find all installed kernel-related packages and mark them as automatically
+installed. Then, purge those of these packages that APT now considers
+auto-removable.
+
+Ubuntu APT has logic that prevents us from removing all kernels this way.
+As an additional safeguard, we always avoid purging the currently running
+kernel from this script.
+"""
 
 import apt
 import os
