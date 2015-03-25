@@ -35,9 +35,11 @@ if $::lsbdistid == 'Ubuntu' {
     mode   => '0755',
     source => "puppet:///modules/${module_name}/kernel-cleanup.py",
   } ->
-  exec { 'kernel_cleanup':
-    command  => '/usr/local/sbin/kernel-cleanup',
-    schedule => 'daily',
+  cron { 'kernel_cleanup':
+    command => '/usr/local/sbin/kernel-cleanup',
+    user    => 'root',
+    hour    => 2,
+    minute  => 25,
   }
 
 }
