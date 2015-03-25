@@ -7,6 +7,7 @@ class base::profile::packages (
                     'bash-completion',
                     'git',
                     'ipmitool',
+                    'moreutils',
                     'ntp',
                     'sysstat',
                     'wget',
