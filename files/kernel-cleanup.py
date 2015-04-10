@@ -14,6 +14,7 @@ kernel from this script.
 import apt
 import os
 
+os.environ["PATH"] = "/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin"
 
 class SourcePackageFilter(apt.cache.Filter):
     def __init__(self, source_packages):
