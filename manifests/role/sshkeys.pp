@@ -1,7 +1,7 @@
 # Deploys SSH authorized keys from an arbitrary number of ssh::authorized_keys
 # style hashes (either in global (default) or the ssh::keys:: name space).
 class base::role::sshkeys (
-  $key_sources = hiera('ssh::key_sources', []),
+  $key_sources = hiera('ssh::key_sources', split($::sshkeys, ' ')),
   $namespace = hiera('ssh::key_namespace', undef),
 ) {
     $keys_merged = merge_hiera_hashes($key_sources, $namespace)
