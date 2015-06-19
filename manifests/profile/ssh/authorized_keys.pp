@@ -2,7 +2,7 @@
 class base::profile::ssh::authorized_keys (
   $authorized_keys = {},
 ) {
-  class { 'ssh::authorized_keys':
+  class { '::ssh::authorized_keys':
     authorized_keys => $authorized_keys,
   }
 }
