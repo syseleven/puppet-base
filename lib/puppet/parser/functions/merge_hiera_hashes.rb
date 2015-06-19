@@ -45,7 +45,7 @@ module Puppet::Parser::Functions
 
     unless ( args.empty? )
       if ( (args.first.class == String) and args.first != '' )
-        name = args.shift()
+        namespace = args.shift()
       end
     end
 
