@@ -1,3 +1,5 @@
+require 'hiera'
+
 module Puppet::Parser::Functions
   newfunction(:merge_hiera_hashes, :type => :rvalue, :doc => <<-'ENDHEREDOC') do |args|
     Merges the hiera hashes supplied as arguments. Takes an array of Strings
@@ -42,7 +44,9 @@ module Puppet::Parser::Functions
     namespace = nil        # Optional Name space to qualify lookups with
 
     unless ( args.empty? )
-      namespace = args.shift()
+      if ( (args.first.class == String) and args.first != '' )
+        name = args.shift()
+      end
     end
 
     res = Hash.new         # Will hold results
@@ -58,9 +62,9 @@ module Puppet::Parser::Functions
       end
 
       begin
-        hiera_res = hiera_hash(name)
+        hiera_res = function_hiera_hash([name])
       rescue => e
-        warning("merge_hiera_hashes: Hiera lookup of #{name} failed: '#{e.to_s}', skipping.")
+        warning("merge_hiera_hashes: Hiera lookup of #{name} (namespace: #{namespace}) failed: '#{e.to_s}', skipping.")
         next
       end
 
