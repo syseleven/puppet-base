@@ -4,11 +4,12 @@ class base::role::sshkeys (
   $key_sources = hiera('ssh::key_sources', split($::sshkeys, '\s+')),
 ) {
 
-    if $key_sources == '' {
+    if $key_sources == [] {
       $_key_sources = concat([ 'ssh::keys::sys11', 'ssh::keys::user' ], ['ssh::authorized_keys::authorized_keys'])
       } else {
       $_key_sources = concat($key_sources, ['ssh::authorized_keys::authorized_keys'])
     }
+
 
     $keys_merged = merge_hiera_hashes($_key_sources)
 
