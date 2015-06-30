@@ -10,11 +10,5 @@ class base::profile::apt_proxy(
       key       => 'Acquire::http::Proxy',
       value     => "\"$proxy_url\";",
     }
-
-    # apt-key does not honor apt.conf, so override default provider setting
-    Apt_key <| |> {
-      keyserver_options => "http-proxy=$proxy_url",
-    }
   }
-
 }
