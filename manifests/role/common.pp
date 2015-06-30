@@ -16,6 +16,7 @@ class base::role::common (
   class { '::base::profile::logrotate': }
   class { '::base::profile::proposed_updates': }
   class { '::base::profile::apt_proxy': }
+  class { '::base::profile::apt_keyserver': }
 
 
   if $::is_virtual == 'false' {
