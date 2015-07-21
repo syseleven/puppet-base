@@ -6,6 +6,7 @@ class base::profile::packages (
     'attr',
     'bash-completion',
     'git',
+    'htop',
     'ipmitool',
     'moreutils',
     'ntp',
@@ -16,6 +17,7 @@ class base::profile::packages (
 
   $purge_everywhere = [
     'eatmydata',
+    'ufw',
   ]
 
   $not_on_metal = [
