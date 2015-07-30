@@ -9,7 +9,7 @@ class base::role::common (
   class { '::base::profile::kdump': }
   class { '::base::profile::kmod': }
   class { '::base::profile::packages': }
-  class { '::base::profile::timezone': }
+  class { '::base::profile::time': }
   class { '::base::profile::screenrc': }
   class { '::base::profile::sysctl': }
   class { '::base::profile::motd': }
