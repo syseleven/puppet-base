@@ -8,9 +8,9 @@ class base::profile::sysctl (
     },
 ) {
 
-  $sysctls_real = $::virtual ? {
-    'openvz' => delete($sysctls, 'net.core.default_qdisc'),
-    default  => $sysctls,
+  $sysctls_real = versioncmp($::kernelmajversion, '3.1') ? {
+    '-1'    => delete($sysctls, 'net.core.default_qdisc'),
+    default => $sysctls,
   }
 
   if is_hash($sysctls_real)
