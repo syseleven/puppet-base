@@ -8,11 +8,16 @@ class base::profile::sysctl (
     },
 ) {
 
-  if is_hash($sysctls)
+  $sysctls_real = versioncmp($::kernelmajversion, '3.1') ? {
+    '-1'    => delete($sysctls, 'net.core.default_qdisc'),
+    default => $sysctls,
+  }
+
+  if is_hash($sysctls_real)
     {
-      $sysctlnames = keys($sysctls)
+      $sysctlnames = keys($sysctls_real)
       base::resource::sysctls{$sysctlnames:
-        settings => $sysctls,
+        settings => $sysctls_real,
       }
     }
 }
