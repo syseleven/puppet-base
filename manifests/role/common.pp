@@ -19,7 +19,7 @@ class base::role::common (
     class { '::base::profile::irqbalance': }
   }
 
-  if $::virtual != 'openvzve' {
+  if $::virtual != 'openvzve' or $::is_virtual != 'openvz' {
     class { '::base::profile::grub': }
     class { '::base::profile::kernel': }
     class { '::base::profile::sysctl': }
