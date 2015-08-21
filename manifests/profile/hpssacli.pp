@@ -1,7 +1,7 @@
 class base::profile::hpssacli {
 
   apt::key { 'FB410E68CEDF95D066811E95527BC53A2689B887':
-    key_source => 'http://downloads.linux.hp.com/SDR/repo/mcp/GPG-KEY-mcp',
+    key_source => 'http://downloads.linux.hp.com/hpPublicKey1024.pub',
   }
 
   apt::key { '476DADAC9E647EE27453F2A3B070680A5CE2D476':
