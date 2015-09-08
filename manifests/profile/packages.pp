@@ -5,6 +5,7 @@ class base::profile::packages (
     'acl',
     'attr',
     'bash-completion',
+    'curl',
     'git',
     'htop',
     'ipmitool',
