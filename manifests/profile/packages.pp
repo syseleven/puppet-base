@@ -5,6 +5,7 @@ class base::profile::packages (
     'acl',
     'attr',
     'bash-completion',
+    'bc',
     'curl',
     'git',
     'htop',
