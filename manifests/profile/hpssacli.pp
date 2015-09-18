@@ -25,4 +25,14 @@ class base::profile::hpssacli {
     require => Apt::Source['hpssacli'],
   }
 
+  package { 'hpssaducli':
+    ensure  => installed,
+    require => Apt::Source['hpssacli'],
+  }
+
+  file{'/usr/local/sbin/hpssaducli':
+    ensure  => link,
+    target  => '/opt/hp/hpssaducli/bin/hpssaducli',
+    require => Package['hpssaducli'],
+  }
 }
