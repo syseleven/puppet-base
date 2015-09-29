@@ -10,7 +10,7 @@ if $::lsbdistid == 'Ubuntu' {
         ensure => latest,
       }
 
-      package { 'linux-generic-lts-utopic':
+      package { 'linux-generic-lts-vivid':
         ensure => latest,
       }
 
@@ -20,7 +20,7 @@ if $::lsbdistid == 'Ubuntu' {
         ensure => latest,
       }
 
-      package { 'linux-virtual-lts-utopic':
+      package { 'linux-virtual-lts-vivid':
         ensure => latest,
       }
 
