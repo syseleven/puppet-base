@@ -16,6 +16,7 @@ import os
 
 os.environ["PATH"] = "/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin"
 
+
 class SourcePackageFilter(apt.cache.Filter):
     def __init__(self, source_packages):
         self.spkgs = source_packages
@@ -25,6 +26,11 @@ class SourcePackageFilter(apt.cache.Filter):
             if pkg.installed.source_name in self.spkgs:
                 return True
         return False
+
+
+class SignedKernelFilter(apt.cache.Filter):
+    def apply(self, pkg):
+        return bool(pkg.is_installed and pkg.section == "kernel" and pkg.name.startswith("linux-signed"))
 
 
 class KernelCleaner(object):
@@ -42,8 +48,15 @@ class KernelCleaner(object):
         packages.set_filter(SourcePackageFilter(self.get_tracks()))
         return packages
 
+    def get_signed_kernels(self):
+        packages = apt.cache.FilteredCache(self.c)
+        packages.set_filter(SignedKernelFilter())
+        return packages
+
     def mark_kernels_auto(self):
         for pkg in self.get_packages():
+            pkg.mark_auto()
+        for pkg in self.get_signed_kernels():
             pkg.mark_auto()
         self.c.commit()
 
