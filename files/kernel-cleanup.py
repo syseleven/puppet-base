@@ -12,6 +12,7 @@ kernel from this script.
 """
 
 import apt
+import itertools
 import os
 
 os.environ["PATH"] = "/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin"
@@ -43,20 +44,21 @@ class KernelCleaner(object):
     def get_tracks(self):
         return set([(pkg.installed or pkg.candidate).source_name for pkg in self.get_kernels()])
 
-    def get_packages(self):
+    def get_kernel_packages(self):
         packages = apt.cache.FilteredCache(self.c)
         packages.set_filter(SourcePackageFilter(self.get_tracks()))
         return packages
 
-    def get_signed_kernels(self):
+    def get_signed_kernel_packages(self):
         packages = apt.cache.FilteredCache(self.c)
         packages.set_filter(SignedKernelFilter())
         return packages
 
+    def get_packages(self):
+        return itertools.chain(self.get_kernel_packages(), self.get_signed_kernel_packages())
+
     def mark_kernels_auto(self):
         for pkg in self.get_packages():
-            pkg.mark_auto()
-        for pkg in self.get_signed_kernels():
             pkg.mark_auto()
         self.c.commit()
 
