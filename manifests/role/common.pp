@@ -6,6 +6,7 @@ class base::role::common (
   class { '::base::profile::vim': }
   class { '::base::profile::packages': }
   class { '::base::profile::time': }
+  class { '::base::profile::tmpreaper': }
   class { '::base::profile::screenrc': }
   class { '::base::profile::motd': }
   class { '::base::profile::logrotate': }
