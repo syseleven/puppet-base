@@ -17,6 +17,7 @@ class base::role::common (
 
   if $::is_virtual == 'false' {
     class { '::base::profile::hpssacli': }
+    class { '::base::profile::sas3ircu': }
     class { '::base::profile::irqbalance': }
   }
 
