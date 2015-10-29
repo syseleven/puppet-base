@@ -1,8 +1,6 @@
 class base::profile::time () {
 
-  class {'::timezone':
-    timezone => 'Europe/Berlin',
-  }
+  class {'::timezone': }
 
   service { 'ntp':
     ensure => running,
