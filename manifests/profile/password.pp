@@ -10,4 +10,14 @@ $password = undef
       password => $password,
     }
   }
+
+  if $::is_virtual == 'false'
+    {
+    exec { 'remove bootstrap password from issue':
+      provider => shell,
+      command  => "sed -i '/^root password:/,+1d' /etc/issue",
+      onlyif   => "grep '^root password:' /etc/issue",
+      require  => User['root'],
+      }
+    }
 }
