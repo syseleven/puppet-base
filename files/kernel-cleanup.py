@@ -12,7 +12,6 @@ kernel from this script.
 """
 
 import apt
-import itertools
 import os
 
 os.environ["PATH"] = "/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin"
@@ -54,17 +53,19 @@ class KernelCleaner(object):
         packages.set_filter(SignedKernelFilter())
         return packages
 
-    def get_packages(self):
-        return itertools.chain(self.get_kernel_packages(), self.get_signed_kernel_packages())
-
     def mark_kernels_auto(self):
-        for pkg in self.get_packages():
+        for pkg in self.get_kernel_packages():
             pkg.mark_auto()
+        self.c.commit()
+
+    def purge_signed_kernels(self):
+        for pkg in self.get_signed_kernel_packages():
+            pkg.mark_delete(auto_fix=False, purge=True)
         self.c.commit()
 
     def purge_old_kernels(self):
         release = os.uname()[2]
-        for pkg in self.get_packages():
+        for pkg in self.get_kernel_packages():
             if release not in pkg.name:
                 if pkg.is_auto_removable:
                     pkg.mark_delete(auto_fix=False, purge=True)
@@ -73,6 +74,7 @@ class KernelCleaner(object):
 
 def main():
     kc = KernelCleaner()
+    kc.purge_signed_kernels()
     kc.mark_kernels_auto()
     kc.purge_old_kernels()
 
