@@ -30,7 +30,7 @@ class SourcePackageFilter(apt.cache.Filter):
 
 class SignedKernelFilter(apt.cache.Filter):
     def apply(self, pkg):
-        return bool(pkg.is_installed and pkg.section == "kernel" and pkg.name.startswith("linux-signed"))
+        return bool(pkg.is_installed and pkg.section in ("kernel", "utils") and pkg.name.startswith("linux-signed"))
 
 
 class KernelCleaner(object):
