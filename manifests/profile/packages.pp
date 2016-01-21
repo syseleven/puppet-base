@@ -23,6 +23,7 @@ class base::profile::packages (
   $purge_everywhere = [
     'eatmydata',
     'ufw',
+    'ubuntu-release-upgrader-core',
   ]
 
   $not_on_metal = [
