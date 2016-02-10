@@ -24,6 +24,7 @@ class base::profile::packages (
     'eatmydata',
     'ufw',
     'ubuntu-release-upgrader-core',
+    'mlocate',
   ]
 
   $not_on_metal = [
